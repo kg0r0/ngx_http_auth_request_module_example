@@ -1,0 +1,1 @@
+# ngx_http_auth_request_module_example
