@@ -1,7 +1,14 @@
 const express = require('express');
+const Redis = require('ioredis');
 const app = express();
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+  const redis = new Redis({
+    host: 'redis',
+  });
+  const pong = await redis.ping();
+  console.log(pong);
+  redis.disconnect();
   if (!req.headers['authorization']) {
     res.status(401).send("NG");
   } else {
