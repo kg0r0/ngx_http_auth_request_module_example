@@ -6,11 +6,12 @@ services:
       - 80:80
     depends_on:
       - authproxy 
+      - app 
   authproxy:
     build: ./auth_proxy
-    ports:
-      - 3000:3000
     depends_on:
       - redis
   redis:
     image: "redis:alpine"
+  app:
+    build: ./app
