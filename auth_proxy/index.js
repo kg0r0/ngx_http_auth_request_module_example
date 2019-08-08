@@ -2,7 +2,6 @@ const express = require('express');
 const auth = require('basic-auth');
 const Redis = require('ioredis');
 const app = express();
-const compare = require('tsscmp');
 
 app.get('/', async (req, res) => {
   const redis = new Redis({
@@ -18,13 +17,6 @@ app.get('/', async (req, res) => {
   }
   redis.disconnect();
 });
-
-function check(name, expectedName, pass, expectedPass) {
-  let valid = true;
-  valid = compare(name, expectedName) && valid
-  valid = compare(pass, expectedPass) && valid
-  return valid
-}
 
 app.listen(3000, () => {
   console.log('Server running at http://127.0.0.1:3000')
