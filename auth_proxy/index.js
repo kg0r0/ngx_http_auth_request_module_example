@@ -8,21 +8,21 @@ app.get('/', async (req, res) => {
   const redis = new Redis({
     host: 'redis',
   });
-  const pong = await redis.ping();
   const credentials = auth(req);
-  console.log(pong);
-  redis.disconnect();
-  if (!credentials || !check(credentials.name, credentials.pass)) {
+  let result = await redis.get('credentials');
+  result = JSON.parse(result);
+  if (!credentials || credentials.name !== result.name || credentials.pass !== result.pass) {
     res.status(401).send('Access denied');
   } else {
     res.status(200).send('Access granted');
   }
+  redis.disconnect();
 });
 
-function check(name, pass) {
+function check(name, expectedName, pass, expectedPass) {
   let valid = true;
-  valid = compare(name, 'name') && valid
-  valid = compare(pass, 'password') && valid
+  valid = compare(name, expectedName) && valid
+  valid = compare(pass, expectedPass) && valid
   return valid
 }
 
